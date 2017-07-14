@@ -45,7 +45,10 @@ export class CustomersComponent implements OnInit {
     this.customerForm = this.fb.group({
         firstName: ['', [Validators.required, Validators.minLength(3)]],
         lastName: ['', [Validators.required, Validators.maxLength(50)]],
-        email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]+')]],
+        emailGroup: this.fb.group({ // <-- the nested FormGroup
+          email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]+')]],
+          confirmEmail: ['', [Validators.required]], // <-- here - no pattern is needed for comparison
+        }),
         phone: '',
         notification: 'email',
         rating: ['', ratingRange(1, 5)],
