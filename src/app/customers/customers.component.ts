@@ -3,6 +3,21 @@ import { Component, OnInit } from '@angular/core';
 
 import { Customer } from './customer';
 
+// the email comparison function
+function emailMatcher(control: AbstractControl): {[key: string]: boolean} | null {
+  const emailControl = control.get('email');
+  const confirmControl = control.get('confirmEmail');
+
+  if (emailControl.pristine || confirmControl.pristine) {
+    return null;
+  }
+
+  if (emailControl.value === confirmControl.value) {
+    return null
+  }
+  return { 'match': true };
+}
+
 // the factory function which takes two parameters (min and max acceptable value)
 function ratingRange(min: number, max: number): ValidatorFn {
   // custom validator
@@ -48,12 +63,14 @@ export class CustomersComponent implements OnInit {
         emailGroup: this.fb.group({ // <-- the nested FormGroup
           email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]+')]],
           confirmEmail: ['', [Validators.required]], // <-- here - no pattern is needed for comparison
-        }),
+        }, { validator: emailMatcher }),
         phone: '',
         notification: 'email',
         rating: ['', ratingRange(1, 5)],
         sendCatalog: true
     });
+
+    this.customerForm.get('notification').valueChanges.subscribe( value => this.setNotification(value) );
   }
 
   populateTestData(): void {
