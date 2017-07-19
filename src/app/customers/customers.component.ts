@@ -38,6 +38,12 @@ export class CustomersComponent implements OnInit {
 
   customerForm: FormGroup;                    // the root form group
   customer: Customer= new Customer();
+  emailMessage: any;
+
+  private validationMessages = {
+    required: 'Please enter your email address - you don\'t dare.',
+    pattern: 'Please enter a valid email address - you don\'t dare.',
+  }
 
   constructor(private fb: FormBuilder) { }
 
@@ -71,6 +77,15 @@ export class CustomersComponent implements OnInit {
     });
 
     this.customerForm.get('notification').valueChanges.subscribe( value => this.setNotification(value) );
+
+    ////
+    // The watcher for the FormControl 'emailGroup.email'
+    ////
+    const emailControl = this.customerForm.get('emailGroup.email');
+    emailControl.valueChanges.subscribe( value => {
+      console.log(value);
+      this.setMessage(emailControl);
+    });
   }
 
   populateTestData(): void {
@@ -84,6 +99,17 @@ export class CustomersComponent implements OnInit {
   save() {
     console.log(this.customerForm);
     console.log('Saved: ' + JSON.stringify(this.customerForm.value));
+  }
+
+  ////
+  // the new method for setting the validation messages
+  ////
+  setMessage(control: AbstractControl): void {
+    this.emailMessage = '';
+
+    if ( (control.touched || control.dirty ) && ( control.errors || control.valid ) ) {
+      this.emailMessage = Object.keys(control.errors).map( key => this.validationMessages[key] );
+    }
   }
 
   setNotification(notifyVia: string): void {

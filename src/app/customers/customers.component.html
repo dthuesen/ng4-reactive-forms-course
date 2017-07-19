@@ -67,6 +67,11 @@
                                 type="email"
                                 placeholder="Email (required)"
                                 formControlName="email" />
+                          <div *ngIf="emailMessage" class="help-block">
+                            {{emailMessage}}
+                          </div>
+                          <!-- extract validatin messages to the component class -->
+                          <!--
                           <span class="help-block" *ngIf="( customerForm.get('emailGroup.email').touched ||
                                                             customerForm.get('emailGroup.email').dirty ) &&
                                                             customerForm.get('emailGroup.email').errors">
@@ -78,6 +83,7 @@
                                 Please enter a valid email address.
                             </span>
                         </span>
+                          -->
                       </div>
                   </div>
 
