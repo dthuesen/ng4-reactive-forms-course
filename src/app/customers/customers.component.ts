@@ -1,3 +1,5 @@
+import 'rxjs/add/operator/debounceTime'
+
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
@@ -82,8 +84,9 @@ export class CustomersComponent implements OnInit {
     // The watcher for the FormControl 'emailGroup.email'
     ////
     const emailControl = this.customerForm.get('emailGroup.email');
-    emailControl.valueChanges.subscribe( value => {
-      console.log(value);
+    emailControl.valueChanges
+                    .debounceTime(2000)
+                    .subscribe( value => {
       this.setMessage(emailControl);
     });
   }
@@ -107,8 +110,8 @@ export class CustomersComponent implements OnInit {
   setMessage(control: AbstractControl): void {
     this.emailMessage = '';
 
-    if ( (control.touched || control.dirty ) && ( control.errors || control.valid ) ) {
-      this.emailMessage = Object.keys(control.errors).map( key => this.validationMessages[key] );
+    if ( (control.touched || control.dirty ) && control.errors ) {
+      this.emailMessage = Object.keys(control.errors).map( key => this.validationMessages[key] ).join(' ');
     }
   }
 

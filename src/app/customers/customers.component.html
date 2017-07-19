@@ -55,9 +55,7 @@
 
                   <!-- The email input -->
                   <div class="form-group"
-                       [ngClass]="{ 'has-error': (customerForm.get('emailGroup.email').touched ||
-                                                  customerForm.get('emailGroup.email').dirty) &&
-                                                  !customerForm.get('emailGroup.email').valid }">
+                       [ngClass]="{ 'has-error': emailMessage }">
                     <label class="col-md-2 control-label"
                           for="emailId">Email</label>
 
@@ -67,23 +65,9 @@
                                 type="email"
                                 placeholder="Email (required)"
                                 formControlName="email" />
-                          <div *ngIf="emailMessage" class="help-block">
-                            {{emailMessage}}
-                          </div>
-                          <!-- extract validatin messages to the component class -->
-                          <!--
-                          <span class="help-block" *ngIf="( customerForm.get('emailGroup.email').touched ||
-                                                            customerForm.get('emailGroup.email').dirty ) &&
-                                                            customerForm.get('emailGroup.email').errors">
-
-                            <span *ngIf="customerForm.get('emailGroup.email').errors.required">
-                                Please enter your email address.
-                            </span>
-                            <span *ngIf="customerForm.get('emailGroup.email').errors.pattern">
-                                Please enter a valid email address.
-                            </span>
-                        </span>
-                          -->
+                          <span class="help-block" *ngIf="emailMessage">
+                            {{ emailMessage }}
+                          </span>
                       </div>
                   </div>
 
